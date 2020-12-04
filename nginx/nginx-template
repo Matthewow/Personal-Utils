@@ -1,0 +1,34 @@
+server{
+        listen 80;
+        server_name abc.com;
+
+        location / {
+                root /path/demos;
+                index videoroomtest.html;
+                proxy_pass https://abc.com;
+        }
+}
+
+server {
+
+        listen 443 ssl;
+        server_name videoroom-dev.ve-connect.com;
+        ssl_certificate path/fullchain.pem; # managed by Certbot
+        ssl_certificate_key path/privkey.pem; # managed by Certbot
+
+        location /api {
+                proxy_pass http://abc.com8100/plugins/videoroom;
+        }
+
+
+        location / {
+                root /path/demos;
+                index videoroomtest.html;
+        }
+
+        error_page 500 502 503 504 /50x.html;
+                location = /50x.html {
+                root /usr/share/nginx/html;
+        }
+
+}
