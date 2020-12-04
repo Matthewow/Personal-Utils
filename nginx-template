@@ -1,0 +1,31 @@
+server {
+
+        listen 443 ssl;
+        server_name abc.com;
+        ssl_certificate      /root/cert.crt;
+        ssl_certificate_key  /root/cert.key;
+
+        location /forward {
+                proxy_pass abc.com:1234/api;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+                proxy_read_timeout 86400;
+        }
+
+        location /api {
+                proxy_pass http://videoroom-dev.ve-connect.com:8100/plugins/videoroom;
+        }
+
+
+        location / {
+                root /opt/janus/share/janus/demos;
+                index videoroomtest.html;
+        }
+
+        error_page 500 502 503 504 /50x.html;
+                location = /50x.html {
+                root /usr/share/nginx/html;
+        }
+}
+
