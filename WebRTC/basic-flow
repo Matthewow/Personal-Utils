@@ -1,0 +1,32 @@
+// Clinet A
+
+//set local 
+const lc = new RTCPeerConnection()
+const dc = lc.createDataChannel("channel")
+dc.onmessage = e => console.log("Just got a message" + e.data)
+dc.onopen = e => console.log("Connection opened!")
+
+lc.onicecandidate = e => console.log("new ice candidate! reprinting SDP" 
+												+ JSON.stringify(lc.localDescription))
+lc.createOffer().then(o => lc.setLocalDescription(o)).then(a => console.log("set successfully!"))
+
+//set remote
+const answer = {}
+lc.setRemoteDescription(answer)
+
+//send message 
+dc.send("hello there")
+
+// Client B 
+
+const offer = {}
+const rc = new RTCPeerConnection()
+rc.onicecandidate = e => console.log("new ice candidate! reprinting SDP" 
+												+ JSON.stringify(rc.localDescription))
+rc.ondatachannel = e => {
+		rc.dc = e.channel;
+		rc.dc.onmessage = e => console.log("new message" + e.data)
+		rc.dc.open = e => console.log("Connection Opened!!")
+}
+rc.setRemoteDescription(offer).then(a => console.log("Offer set!"))
+rc.createAnswer().then(a => rc.setLocalDescription(a)).then(a => console.log("answer saved"))
