@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+ 
+<html>
+ 
+  <head>
+ 
+    <meta charset="utf-8">
+ 
+    <title>Date and Time Pickers</title>
+ 
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.2.620/styles/kendo.bootstrap-v4.min.css">
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.2.620/js/kendo.all.min.js"></script>
+ 
+  </head>
+ 
+  <body>
+ 
+    <input id="dateTimePicker">
+    <button  onclick="myFunction()"> confirm</button>
+ 
+    <script>
+        var day, year, month
+     
+      $(document).ready(function(){
+        $('#dateTimePicker').kendoDateTimePicker({
+            interval: 15
+        });
+        
+      });
+
+      function myFunction(){
+        value = ($('#dateTimePicker').val());
+        values = value.split(" ")
+        month = values[0].split("/")[0]
+        day = values[0].split("/")[1]
+        year = values[0].split("/")[2]
+
+        hour = parseInt(values[1].split(":")[0])
+        minute = parseInt(values[1].split(":")[1])
+
+        if(hour === "12")
+            hour = 0;
+        if (values[2] === "PM")
+            hour = hour + 12
+        
+        time = new Date(year + '-' + month + '-' + day).getTime() + (hour*60+minute)*60*1000;
+        nowtime = new Date().getTime();
+
+        if (nowtime > time){
+            console.log("Invalid")
+        }
+        else{
+            console.log(time);
+        }
+      }
+     
+    </script>
+  </body>
+</html>
