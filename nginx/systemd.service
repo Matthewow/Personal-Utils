@@ -12,3 +12,7 @@ ExecStart=/usr/bin/python3 /root/media-server/mediaserver.py
 
 [Install]
 WantedBy=multi-user.target
+
+
+
+sudo systemctl daemon-reload
